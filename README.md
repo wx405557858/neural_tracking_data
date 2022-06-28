@@ -17,7 +17,7 @@
 
 
 ## Citation
-If you use this code for your research, please cite our paper [Gelsight Wedge: Measuring High-Resolution 3D Contact Geometry with a Compact Robot Finger](https://arxiv.org/pdf/2106.08851.pdf):
+If you use this code for your research, please cite our paper: [Gelsight Wedge: Measuring High-Resolution 3D Contact Geometry with a Compact Robot Finger](https://arxiv.org/pdf/2106.08851.pdf):
 
 ```
 @inproceedings{wang2021gelsight,

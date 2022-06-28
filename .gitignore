@@ -1,0 +1,4 @@
+.DS_Store
+*.mov
+*.h5
+__pycache__
