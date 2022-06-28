@@ -13,13 +13,13 @@
 
 ## Train
 
-`python tracking_fix.py -p test`
+`python train.py -p test`
 
 ## Examples
 
-* `python tracking_sim.py`
+* `python example_tracking_sim.py`
 
-* `python tracking_video.py`
+* `python example_tracking_video.py`
 
 
 ## Citation
