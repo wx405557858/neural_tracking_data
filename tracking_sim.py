@@ -26,10 +26,6 @@ x = np.arange(0, W, 1)
 y = np.arange(0, H, 1)
 xx, yy = np.meshgrid(y, x)
 
-# frame0_blur = cv2.imread('frame0_blur.jpg') / 255.
-# frame0_blur = cv2.imread('frame0_blur.jpg') / 255.
-# frame0_blur = cv2.resize(frame0_blur, (W, H))
-
 
 img_blur = (np.random.random((15, 15, 3)) * 0.9) + 0.1
 frame0_blur = cv2.resize(img_blur, (H, W))
@@ -244,33 +240,7 @@ cv2.setMouseCallback("image", motion_callback)
 
 flag_first = False
 
-# model = load_model('models/6x6_1/tracking_195_0.039.h5')
-
-# model = load_model('models/6x6_gelsight/tracking_061_0.064.h5')
-# model = load_model('models/random_ae/tracking_029_0.631.h5')
-# model = load_model('models/random_ae_2/tracking_008_0.550.h5')
-# model = load_model('models/random_ae_size/tracking_028_0.402.h5')
-# model = load_model('models/random_ae_grid/tracking_018_1.554.h5')
-# model = load_model('models/random_ae_grid_abs_k5/tracking_029_1.704.h5')
-# model = load_model('models/random_ae_multi_3/tracking_015_0.771.h5')
-# model = load_model('models/random_ae_multi_add/tracking_016_0.751.h5')
-
-# model = load_model('models/random_ae_random_multi_scratch_4/tracking_049_0.439.h5')
-# model = load_model('models/random_ae_var_2/tracking_097_0.098.h5')
-
-# model = load_model('models/random_ae_var_multi_8_rela_single/tracking_004_0.473.h5')
-# model = load_model('models/random_ae_var_multi_8/tracking_042_0.237.h5')
-
-# model = load_model('models/random_ae_var_multi_8_rela/tracking_029_0.179.h5')
-
-# model = load_model('models/random_ae_var_grid/tracking_041_0.508.h5')
-# model = load_model('models/random_ae_fix_color_3/tracking_069_0.165.h5') # Contraction
 model = load_model("models/random_ae_fix_block/tracking_012_0.515.h5")  # Block
-# model = load_model("models/random_ae_fix_block/tracking_022_0.274.h5")  # Block
-# model = load_model('models/random_ae_var_grid/tracking_050_0.134.h5')
-
-# model = load_model('models/random_ae_random_single/tracking_011_0.610.h5')
-
 
 svid = 0
 

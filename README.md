@@ -2,12 +2,18 @@
 
 ## Getting Started
 
+**System**: Ubuntu, OSX
+
+**Note**: The model is originally implemented with TensorFlow to be compatible with [Coral](https://coral.ai/products/accelerator), using TPU as USB Accelerator for Raspberry Pi on-device computation. Please feel free to switch the model to other frameworks, like PyTorch, for your purpose.
 
 ## Datasets
+
+`python generate_data.py`
 
 
 ## Train
 
+`python tracking_fix.py -p test`
 
 ## Examples
 
