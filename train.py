@@ -48,32 +48,6 @@ except:
 
 print(tf.__version__)
 
-data = np.load("data_random_color_small.npz")
-X_train, Y_train, X_test, Y_test = (
-    data["X_train"],
-    data["Y_train"],
-    data["X_test"],
-    data["Y_test"],
-)
-
-X_train = X_train - 0.5
-X_test = X_test - 0.5
-
-WIDTH = 48
-HEIGHT = 48
-
-X_train = X_train[:, :WIDTH, :HEIGHT]
-X_test = X_test[:, :WIDTH, :HEIGHT]
-Y_train = Y_train[:, :WIDTH, :HEIGHT]
-Y_test = Y_test[:, :WIDTH, :HEIGHT]
-
-x = np.arange(0, WIDTH, 1)
-y = np.arange(0, HEIGHT, 1)
-xx0, yy0 = np.meshgrid(x, y)
-
-Y_train = Y_train  # + np.dstack([xx0, yy0])
-Y_test = Y_test  # + np.dstack([xx0, yy0])
-
 
 shutil.copy("train.py", "models/" + prefix + "/train.py")
 shutil.copy("generate_data.py", "models/" + prefix + "/generate_data.py")
@@ -205,9 +179,6 @@ def build_model_small():
     return model
 
 
-frame0_blur = cv2.imread("frame0_blur.jpg") / 255.0
-frame0_blur = cv2.resize(frame0_blur, (WIDTH, HEIGHT))
-
 with train_graph.as_default():
     #     model = build_model()
     #     model = build_model_ae()
@@ -223,7 +194,7 @@ with train_graph.as_default():
     #     model = load_model('models/random_ae_var_grid/tracking_025_0.627.h5')
     #     model = load_model('models/random_ae_fix_2/tracking_010_0.297.h5')
     #     model = load_model('models/random_ae_fix_block/tracking_022_0.274.h5')
-    model = load_model("models/random_ae_fix_subpixel_color/tracking_099_0.055.h5")
+#     model = load_model("models/random_ae_fix_subpixel_color/tracking_099_0.055.h5")
     #     model = load_model('models/random_ae_fix_small/tracking_099_0.329.h5')
     #     model = load_model('models/random_ae_fix_subpixel_bound/tracking_002_0.343.h5')
 
@@ -269,7 +240,6 @@ with train_graph.as_default():
     X_test, Y_test = next(generate_img(100, setting=(80, 112, 10, 14)))
     #     X_test, Y_test = next(generate_img(100, setting=(80, 112, 10, 14)))
 
-    print(X_train.shape)
     for i in range(100):
         print("epoch", i)
 

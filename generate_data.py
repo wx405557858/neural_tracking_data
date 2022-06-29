@@ -6,25 +6,6 @@ import time
 import numba
 from numba import jit
 
-frame0_blur = cv2.imread('frame0_blur.jpg') / 255.0
-frame0_blur = cv2.resize(frame0_blur, (98, 98))
-
-N = 6
-M = 6
-padding = 4
-interval = 8
-W = 49
-H = 49
-
-print("W", W, "H", H)
-
-
-x = np.arange(0, N, 1) * interval + padding
-y = np.arange(0, M, 1) * interval + padding
-xx, yy = np.meshgrid(x, y)
-
-# xx, yy = (np.random.random([N, M])*W).astype(np.int), (np.random.random([N, M])*H).astype(np.int)
-
 def draw_square(img, x, y, mkr_size, xx, yy, theta):
     w, h = img.shape[0], img.shape[1]
     mkr_size_large = mkr_size * 2**0.5
@@ -169,17 +150,6 @@ def generate_large(xx, yy, img_blur=None, rng=0., W=48, H=48, N=6, M=6):
     return img
 
 
-x = np.arange(0, N, 1) * interval + padding
-y = np.arange(0, M, 1) * interval + padding
-xx, yy = np.meshgrid(x, y)
-
-frame0 = generate(xx, yy)
-
-
-x = np.arange(0, W, 1)
-y = np.arange(0, H, 1)
-xx, yy = np.meshgrid(x, y)
-
 
 def shear(center_x, center_y, sigma, shear_x, shear_y, xx, yy):
     g = np.exp(-( ((xx-center_x)**2 + (yy-center_y)**2)) / ( 2.0 * sigma**2 ) ) 
@@ -223,17 +193,10 @@ def dilate(center_x, center_y, sigma, k, xx, yy):
     yy_ = yy + (k * dy) * g
     return xx_, yy_
 
-x = np.arange(0, W, 1)
-y = np.arange(0, H, 1)
-xx, yy = np.meshgrid(x, y)
-
-
-
-xx0, yy0 = xx.copy(), yy.copy() 
 X = []
 Y = []
 
-def random_shear(xx, yy, W, H):
+def random_shear(xx, yy, W, H, interval=8):
     shear_ratio = 5
     center_x = random.random() * W
     center_y = random.random() * H
