@@ -45,36 +45,8 @@ try:
 except:
     pass
 
-print(tf.__version__)
 
-data = np.load("data_random_color_small.npz")
-X_train, Y_train, X_test, Y_test = (
-    data["X_train"],
-    data["Y_train"],
-    data["X_test"],
-    data["Y_test"],
-)
-
-X_train = X_train - 0.5
-X_test = X_test - 0.5
-
-WIDTH = 48
-HEIGHT = 48
-
-X_train = X_train[:, :WIDTH, :HEIGHT]
-X_test = X_test[:, :WIDTH, :HEIGHT]
-Y_train = Y_train[:, :WIDTH, :HEIGHT]
-Y_test = Y_test[:, :WIDTH, :HEIGHT]
-
-x = np.arange(0, WIDTH, 1)
-y = np.arange(0, HEIGHT, 1)
-xx0, yy0 = np.meshgrid(x, y)
-
-Y_train = Y_train  # + np.dstack([xx0, yy0])
-Y_test = Y_test  # + np.dstack([xx0, yy0])
-
-
-shutil.copy("tracking_var.py", "models/" + prefix + "/tracking_var.py")
+shutil.copy("train_generic.py", "models/" + prefix + "/train_generic.py")
 shutil.copy("generate_data_var.py", "models/" + prefix + "/generate_data_var.py")
 
 
