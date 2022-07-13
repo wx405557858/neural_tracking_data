@@ -27,7 +27,7 @@ import argparse
 import shutil
 import random
 
-from generate_data_var import generate_img
+from generate_data_generic import generate_img
 
 parser = argparse.ArgumentParser(description="Process some integers.")
 parser.add_argument("-p", "--prefix", default="test")
@@ -47,7 +47,9 @@ except:
 
 
 shutil.copy("train_generic.py", "models/" + prefix + "/train_generic.py")
-shutil.copy("generate_data_var.py", "models/" + prefix + "/generate_data_var.py")
+shutil.copy(
+    "generate_data_generic.py", "models/" + prefix + "/generate_data_generic.py"
+)
 
 
 # train
