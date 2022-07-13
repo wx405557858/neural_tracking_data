@@ -3,29 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-
-frame0_blur = cv2.imread('frame0_blur.jpg') / 255.0
-frame0_blur = cv2.resize(frame0_blur, (98, 98))
-
-N = 6
-M = 6
-padding = 4
-interval = 8
-W = 49
-H = 49
-
-print("W", W, "H", H)
-
-
-x = np.arange(0, N, 1) * interval + padding
-y = np.arange(0, M, 1) * interval + padding
-xx, yy = np.meshgrid(x, y)
-
-# xx, yy = (np.random.random([N, M])*W).astype(np.int), (np.random.random([N, M])*H).astype(np.int)
-
 def generate(xx, yy, img_blur=None, rng=0., W=48, H=48, N=6, M=6):
-#     img = np.ones((W, H, 3))
-#     img = frame0_blur.copy()
     if img_blur is None:
         img_blur = (np.random.random((15, 15, 3)) * 0.7) + 0.3
         img_blur = cv2.resize(img_blur, (H, W))
@@ -57,18 +35,6 @@ def generate(xx, yy, img_blur=None, rng=0., W=48, H=48, N=6, M=6):
     return img
 
 
-x = np.arange(0, N, 1) * interval + padding
-y = np.arange(0, M, 1) * interval + padding
-xx, yy = np.meshgrid(x, y)
-
-frame0 = generate(xx, yy)
-
-
-x = np.arange(0, W, 1)
-y = np.arange(0, H, 1)
-xx, yy = np.meshgrid(x, y)
-
-
 def shear(center_x, center_y, sigma, shear_x, shear_y, xx, yy):
     g = np.exp(-( ((xx-center_x)**2 + (yy-center_y)**2)) / ( 2.0 * sigma**2 ) ) 
     xx_ = xx + shear_x * g
@@ -88,17 +54,6 @@ def twist(center_x, center_y, sigma, theta, xx, yy):
     yy_ = yy + (roty - dy) * g
     return xx_, yy_
 
-
-
-x = np.arange(0, W, 1)
-y = np.arange(0, H, 1)
-xx, yy = np.meshgrid(x, y)
-
-
-
-xx0, yy0 = xx.copy(), yy.copy() 
-X = []
-Y = []
 
 def random_shear(xx, yy):
     shear_ratio = 3
@@ -132,7 +87,6 @@ def preprocessing(img):
     sz = int(3 + random.random() * 15)
     x = int(random.random() * (W - sz))
     y = int(random.random() * (H  - sz))
-    ret[x:x+sz, y:y+sz, :] = frame0_blur[x:x+sz, y:y+sz, :]
     
     
     ret = ret * (0.9+random.random()*0.2)
