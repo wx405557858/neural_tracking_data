@@ -32,7 +32,7 @@ bash ./data/download_video.sh
 python example_tracking_video.py
 ```
 
-**Note**: The model is implemented initially with TensorFlow to be compatible with [Coral](https://coral.ai/products/accelerator), using TPU as USB Accelerator for Raspberry Pi on-device computation. Please feel free to switch the model to other frameworks, like PyTorch, for your purpose.
+**Note**: The model is implemented initially with Keras/TensorFlow to be compatible with [Coral](https://coral.ai/products/accelerator), using TPU as USB Accelerator for Raspberry Pi on-device computation. Please feel free to switch the model to other frameworks, like PyTorch, for your purpose.
 
 
 
