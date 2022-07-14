@@ -4,7 +4,43 @@
 
 **System**: Ubuntu, OSX
 
+**Install packages**
+
+```
+pip install tensorflow-gpu opencv-python
+```
+
+**Download models**
+
+```
+bash ./models/download_model.sh
+```
+
+**Download test GelSight video**
+
+```
+bash ./data/download_video.sh
+```
+
+**Inference**
+
+```
+python example_tracking_video.py
+```
+
+<!--
+<img src='https://drive.google.com/file/d/1DN3zOfz4xx4wgTNtGNRruHs9mUEewjer/view?usp=sharing' align="right" width=384>-->
+
 **Note**: The model is originally implemented with TensorFlow to be compatible with [Coral](https://coral.ai/products/accelerator), using TPU as USB Accelerator for Raspberry Pi on-device computation. Please feel free to switch the model to other frameworks, like PyTorch, for your purpose.
+
+
+
+## Examples
+
+* `python example_tracking_sim.py`
+
+* `python example_tracking_video.py`
+
 
 ## Datasets
 
@@ -15,11 +51,6 @@
 
 `python train.py -p test`
 
-## Examples
-
-* `python example_tracking_sim.py`
-
-* `python example_tracking_video.py`
 
 
 ## Citation
