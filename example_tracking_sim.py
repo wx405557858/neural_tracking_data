@@ -198,6 +198,8 @@ flag_first = False
 
 model = load_model("models/weights.h5")
 
+svid = 0
+
 xind = (np.random.random(N * M) * W).astype(np.int)
 yind = (np.random.random(N * M) * H).astype(np.int)
 
