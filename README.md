@@ -1,8 +1,8 @@
 # Marker Tracking with Neural Networks
 
-<img src="https://github.com/wx405557858/neural_tracking/blob/media/imgs/output_example.gif" align="right" width=384>
-
 ## Getting Started
+
+<img src="https://github.com/wx405557858/neural_tracking/blob/media/imgs/output_example.gif" align="right" width=384>
 
 **System**: Ubuntu, OSX
 
