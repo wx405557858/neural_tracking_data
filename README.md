@@ -30,7 +30,7 @@ bash ./data/download_video.sh
 python example_tracking_video.py
 ```
 
-**Note**: The model is originally implemented with TensorFlow to be compatible with [Coral](https://coral.ai/products/accelerator), using TPU as USB Accelerator for Raspberry Pi on-device computation. Please feel free to switch the model to other frameworks, like PyTorch, for your purpose.
+**Note**: The model is implemented initially with TensorFlow to be compatible with [Coral](https://coral.ai/products/accelerator), using TPU as USB Accelerator for Raspberry Pi on-device computation. Please feel free to switch the model to other frameworks, like PyTorch, for your purpose.
 
 
 
@@ -48,26 +48,40 @@ The model is also robust to marker sizes and background disturbances, due to add
 
 * `python example_tracking_sim_generic.py`
 
-The generic model is trained on variable grid patterns, so that it can be invariant to different numbers of markers. The output is the flow with the same size of the input. 
+The generic model is trained on variable grid patterns so that it can be invariant to different numbers of markers. The output is the flow with the same size of the input. 
 
 <img src="https://github.com/wx405557858/neural_tracking/blob/media/imgs/output_sim_generic_example_disturb.gif" width=384>
 
 
-**Note**: We suggest try the generic model for preliminary experiments, and train your fixed model for best performance. The generic one can work on more cases directly, and the fixed one is more accurate for a certain marker pattern.
+**Note**: We suggest trying the generic model for preliminary experiments, and training your fixed model for best performance. The generic one can work on more cases directly, and the fixed one is more accurate for a certain marker pattern.
 
 * `python example_tracking_video.py`
 
-The model can be transfered to real sensor data robustly, with large forces, multiple contacts, and wrinkles.
+The model can be transferred to real sensor data robustly, with large forces, multiple contacts, and wrinkles.
 
 <img src="https://github.com/wx405557858/neural_tracking/blob/media/imgs/output_example.gif" width=384>
 
 ## Train
 
-* `python train.py`
+You can train your own model to optimize the performance for a specific marker pattern. Here are two training example that is trained on 10x14 markers (`train.py`), and variable marker patterns (`train_generic.py`). Please feel free to customize them for your purposes.
 
-* `python train_generic.py`
+### `python train.py`
 
+It takes data pairs `(X, Y)` from `generate_img()` in `generate_data.py`. 
 
+* **Input**: `X` is the synthesized image. It has random backgrounds, and 10x14 markers. The marker positions are randomly distorted (translated and rotated) with Gaussian-based smoothing. It imitates smooth elastomer distortions with simple operations. The markers are then rendered as regions darker than surrounding pixels, given the distorted positions.
+* **Output**: `Y` has a dimension of 10x14x2, which represents the ground-truth horizontal and vertical displacement in pixel for each marker.
+* **Model**: The model consists multiple Convolutional layers and Pooling layers, defined as `build_model_small()` in `train.py`.
+
+### `python train_generic.py`
+
+It takes the data pairs `(X, Y)` from `generate_img()` in `generate_data_generic.py`.
+
+* **Input**: `X` is generated similarly to the previous one. The difference is that the number of rows and columns is randomly selected from [4, 15].
+* **Output**: `Y` is the flow with the same width and height as the input image. Each point represents the horizontal and vertical displacement for each pixel. We use multiple resolutions of Y to accelerate training.
+* **Model**: The model is in the Encoder-Decoder style, which consists of Convolutional, Pooling, and Upsampling layers to generate output with the same dimensions as the input. It is defined as `build_model_ae` in train.py
+
+**Note**: Please customize the `generate_img()` function to fit the marker patterns to your sensor.
 
 ## Citation
 If you use this code for your research, please cite our paper: [Gelsight Wedge: Measuring High-Resolution 3D Contact Geometry with a Compact Robot Finger](https://arxiv.org/pdf/2106.08851.pdf):
