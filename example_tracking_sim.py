@@ -30,8 +30,6 @@ xx, yy = np.meshgrid(y, x)
 img_blur = (np.random.random((15, 15, 3)) * 0.9) + 0.1
 frame0_blur = cv2.resize(img_blur, (H, W))
 
-# frame0_blur = np.ones((49, 49, 3), dtype=np.float32)
-
 crazy = True
 
 
@@ -77,26 +75,10 @@ wy = yy0.copy()
 
 changing_x, changing_y = 0, 0
 
-# def generate(xx, yy):
-#     # img = np.ones((W, H, 3))
-#     img = frame0_blur.copy()
-#     for i in range(N):
-#         for j in range(M):
-#             r = int(xx[i, j])
-#             c = int(yy[i, j])
-#             if r >= W or r < 0 or c >= H or c < 0:
-#                 continue
-#             img[r-2:r+2, c-2:c+2, :] = 0.
-#     # img[20:30,20:30,:] = 1
-#     # img[5:10,5:10,:] = 1
-#     return img
-
 
 def generate(xx, yy):
     # img = np.ones((W, H, 3))
     img = frame0_blur.copy()
-
-    # img = img + np.random.randn(W, H, 3)*0.05 - 0.025
 
     for i in range(N):
         for j in range(M):
@@ -110,18 +92,7 @@ def generate(xx, yy):
                 frame0_blur[r - 1 : r + 2, c - 1 : c + 2, :] * mkr_rng
             )
             img[r, c, :] = frame0_blur[r, c, :] * 0
-            # img[r-1:r+2, c-1:c+2, :] = np.ones(shape)
 
-            # for channel in range(3):
-            #     img[r-1:r+2, c-1:c+2, channel] = img[r-1:r+2, c-1:c+2, channel] * random.random()*0.2
-
-    #             for pi in range(-1,2):
-    #                 for pj in range(-1,2):
-    #                     if r + pi<0 or r + pi >= W or c + pj <0 or c + pj >= H:
-    #                         continue
-    #                     if random.random()<0.7:
-    #                         img[r+pi,c+pj,:] = random.random()*0.2
-    #             img[r-1:r+1, c-1:c+1, :] = 0.
     img = cv2.GaussianBlur(img, (3, 3), 0)
     print("IMG SHAPE", img.shape)
     # img = cv2.resize(img, (H, W))
@@ -132,41 +103,26 @@ def generate(xx, yy):
     return img
 
 
-# def draw_flow(img, flow, xx0, yy0, K=5, img_raw=None):
-#     if img_raw is None:
-#         img_ = cv2.resize(img, (img.shape[1] * K, img.shape[0] * K))
-#     else:
-#         img_ = cv2.resize(img_raw, (img.shape[1] * K, img.shape[0] * K))
-
-#     scale = 4
-#     color = (0, 255, 255)
-
-#     for i in range(flow.shape[0]):
-#         for j in range(flow.shape[1]):
-#             pt1 = (xx0[i, j] * K, yy0[i, j] * K)
-#             pt2 = (flow[i, j, 0] * K, flow[i, j, 1] * K)
-#             pt3 = (
-#                 pt2[0] + (pt2[0] - pt1[0]) * scale,
-#                 pt2[1] + (pt2[1] - pt1[1]) * scale,
-#             )
-#             pt1 = (int(round(pt1[0])), int(round(pt1[1])))
-#             pt3 = (int(round(pt3[0])), int(round(pt3[1])))
-#             cv2.arrowedLine(img_, pt1, pt3, color, 2, 8, 0, 0.4)
-
-#     return img_
-
-
-def draw_flow_abs(img, flow, xx0, yy0, K=5, img_raw=None):
+def draw_flow(img, flow, xx0, yy0, K=5, img_raw=None):
     if img_raw is None:
         img_ = cv2.resize(img, (img.shape[1] * K, img.shape[0] * K))
     else:
         img_ = cv2.resize(img_raw, (img.shape[1] * K, img.shape[0] * K))
 
+    scale = 0
+    color = (0, 255, 255)
+
     for i in range(flow.shape[0]):
         for j in range(flow.shape[1]):
-            pt1 = (int(xx0[i, j] * K), int(yy0[i, j] * K))
-            pt2 = (int(flow[i, j, 0] * K), int(flow[i, j, 1] * K))
-            cv2.arrowedLine(img_, pt1, pt2, (0, 255, 255), 2, 8, 0, 0.4)
+            pt1 = (xx0[i, j] * K, yy0[i, j] * K)
+            pt2 = (flow[i, j, 0] * K, flow[i, j, 1] * K)
+            pt3 = (
+                pt2[0] + (pt2[0] - pt1[0]) * scale,
+                pt2[1] + (pt2[1] - pt1[1]) * scale,
+            )
+            pt1 = (int(round(pt1[0])), int(round(pt1[1])))
+            pt3 = (int(round(pt3[0])), int(round(pt3[1])))
+            cv2.arrowedLine(img_, pt1, pt3, color, 2, 8, 0, 0.4)
 
     return img_
 
@@ -175,7 +131,7 @@ def contrain(xx, yy):
     dx = xx - xx0
     dy = yy - yy0
     if crazy == False:
-        thres = 0.35 * interval
+        thres = 1 * interval
         mag = (dx ** 2 + dy ** 2) ** 0.5
         mask = mag > thres
         dx[mask] = dx[mask] / mag[mask] * thres
@@ -240,28 +196,20 @@ cv2.setMouseCallback("image", motion_callback)
 
 flag_first = False
 
-model = load_model("models/random_ae_fix_block/tracking_012_0.515.h5")  # Block
-
-svid = 0
+model = load_model("models/weights.h5")
 
 xind = (np.random.random(N * M) * W).astype(np.int)
 yind = (np.random.random(N * M) * H).astype(np.int)
-
 
 # T = 4
 interval_x = W / (N + 1)
 interval_y = H / (M + 1)
 
-print(interval_x, interval_y)
 x = np.arange(interval_x, W, interval_x)[:N]
 y = np.arange(interval_y, H, interval_y)[:M]
-print(x, y)
-# exit()
 xind, yind = np.meshgrid(x, y)
 xind = (xind.reshape([1, -1])[0]).astype(np.int)
 yind = (yind.reshape([1, -1])[0]).astype(np.int)
-
-# print("xind",xind)
 
 
 xx_marker, yy_marker = xx[xind, yind].reshape([N, M]), yy[xind, yind].reshape([N, M])
@@ -274,31 +222,15 @@ while True:
     )
 
     img = generate(xx_marker_, yy_marker_)
-    if len(traj) > 0:
-        pad = 10
-        mousex, mousey = int(traj[-1][1]), int(traj[-1][0])
-        img[mousex - pad : mousex + pad, mousey - pad : mousey + pad, 1:] *= 0.3
-
-    # img += np.random.random(img.shape) * 0.1
     st = time.time()
-    pred = model.predict(np.array([img - 0.5]))[0]
-    print(time.time() - st)
-
-    # pred += 0.5
 
     if flag_first == False:
         flag_first = True
-        # xx0 = pred[0][:,:,0]
-        # yy0 = pred[0][:,:,1]
         img0 = img.copy()
         continue
 
-    # pred = pred - pred0# + np.dstack([xx0, yy0])
-    # display_img = cv2.resize(img, (H*K, W*K))
-    # display_img = draw_flow(img, pred[0])
-
-    # relative
-    # flow = np.swapaxes(pred[0,:,:,::-1],0,1)
+    pred = model.predict(np.array([np.dstack([img0 - 0.5, img - 0.5])]))[0]
+    print(time.time() - st)
 
     # absolute
 
@@ -306,27 +238,12 @@ while True:
         pred0 = pred.copy()
         xx_marker0 = pred0[:, :, 0]
         yy_marker0 = pred0[:, :, 1]
-    # flow = np.swapaxes(pred[:,:,::-1]-np.dstack([yy0, xx0]),0,1)
+
     flow = pred[:, :]
     print(flow)
-    # flow = np.rot90(np.swapaxes(flow, 0,1),k=2,axes=(0,1))
-    # flow = pred[:,:]-np.dstack([xx0, yy0])
 
-    # display_img = optical_flow_opencv.draw_nn(img, pred[0,:,:,::-1], scale=1, K=10)
-    # display_img = optical_flow_opencv.draw_nn(img, flow, scale=1, K=5)
+    display_img = draw_flow(img, flow, xx_marker0, yy_marker0, K=K, img_raw=img)
 
-    display_img = draw_flow_abs(img, flow, xx_marker0, yy_marker0, K=K, img_raw=img)
-
-    # flow_of = optical_flow_opencv.of(img0, img)
-    # display_img_of = optical_flow_opencv.draw(img, flow_of, scale=1, K=10)
-
-    # # gt = draw_flow(img, np.dstack([xx, yy]))
-    # flow_gt = np.dstack([xx-xx0, yy-yy0])
-    # # flow_gt = np.swapaxes(flow_gt, 0, 1)
-    # gt = optical_flow_opencv.draw(img, flow_gt, scale=1, K=10)
-
-    # cv2.imshow("image_of", display_img_of)
-    # cv2.imshow("gt", gt)
     cv2.imshow("image", display_img)
     key = cv2.waitKey(1) & 0xFF
 
@@ -346,8 +263,8 @@ while True:
     elif key == ord("q"):
         break
     elif key == ord("c"):
-        img_blur = (np.random.random((3, 3, 3)) * 0.7) + 0.3
-        frame0_blur = cv2.resize(img_blur, (49, 49))
+        img_blur = (np.random.random((15, 15, 3)) * 0.9) + 0.1
+        frame0_blur = cv2.resize(img_blur, (H, W))
 
         xx_marker, yy_marker = xx0[xind, yind].reshape([N, M]), yy0[xind, yind].reshape(
             [N, M]
@@ -360,15 +277,6 @@ while True:
 
     elif key == ord("k"):
         crazy = crazy ^ True
-
-    elif key == ord("d"):
-        xind = (np.random.random(N * M) * W).astype(np.int)
-        yind = (np.random.random(N * M) * H).astype(np.int)
-
-        xx_marker, yy_marker = xx0[xind, yind].reshape([N, M]), yy0[xind, yind].reshape(
-            [N, M]
-        )
-        img0 = generate(xx_marker, yy_marker)
 
     elif key == ord("z"):
         mkr_rng = mkr_rng - 0.5
