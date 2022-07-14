@@ -39,6 +39,14 @@ def draw_flow(img, flow, xx0, yy0, K=5, img_raw=None):
 
 
 def tracking(frames, model):
+
+    fourcc = cv2.VideoWriter_fourcc("M", "J", "P", "G")
+    fn_video = "output.mov"
+
+    col = 448
+    row = 320
+    out = cv2.VideoWriter(fn_video, fourcc, 30.0, (col * 1, row * 1))
+
     im0 = frames[0]
     im0_blur = cv2.GaussianBlur(im0, (int(63), int(63)), 0)
     diff0 = None
@@ -79,9 +87,13 @@ def tracking(frames, model):
         cv2.imshow("frame", diff_center_small)
         cv2.imshow("nn", display_img)
 
+        print("display_img.shape", display_img.shape)
+        out.write(display_img)
+
         c = cv2.waitKey(1)
         if c & 0xFF == ord("q"):
             break
+    out.release()
 
 
 frames = load_video("data/marker_example.mov")
