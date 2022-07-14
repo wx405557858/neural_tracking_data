@@ -53,6 +53,7 @@ train_sess = tf.Session(graph=train_graph, config=config)
 
 keras.backend.set_session(train_sess)
 
+
 def build_model_small():
     padding = 0
 
@@ -122,17 +123,16 @@ def preprocessing(img):
 
 
 with train_graph.as_default():
-    min_loss = 100
 
-    #     X_test, Y_test = next(generate_img(10000, setting=(48, 48, 6, 6)))
-    X_test, Y_test = next(generate_img(100, setting=(80, 112, 10, 14)))
+    min_loss = 100
+    X_test, Y_test = next(generate_img(1000, setting=(80, 112, 10, 14)))
 
     for i in range(100):
         print("epoch", i)
         model.fit_generator(
             generate_img(32),
             validation_data=None,
-            steps_per_epoch=20,
+            steps_per_epoch=2000,
             epochs=1,
             workers=16,
             use_multiprocessing=True,
