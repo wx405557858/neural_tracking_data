@@ -24,7 +24,7 @@ bash ./models/download_model.sh
 bash ./data/download_video.sh
 ```
 
-**Inference**
+**Marker tracking for GelSight video**
 
 ```
 python example_tracking_video.py
@@ -35,20 +35,20 @@ python example_tracking_video.py
 
 
 ## Examples
+ 
+* `python example_tracking_sim.py`:
 
-* `python example_tracking_sim.py`
+* `python example_tracking_sim_generic.py`:
 
-* `python example_tracking_video.py`
+* `python example_tracking_video.py`:
 
-
-## Datasets
-
-`python generate_data.py`
-
+<img src="https://github.com/wx405557858/neural_tracking/blob/media/imgs/output_example.gif" width=384>
 
 ## Train
 
-`python train.py -p test`
+* `python train.py`
+
+* `python train_generic.py`
 
 
 
