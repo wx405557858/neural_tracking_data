@@ -1,5 +1,7 @@
 # Marker Tracking with Neural Networks
 
+This project provides robust marker tracking for camera-based tactile sensors with Sim2Real neural networks.
+
 ## Getting Started
 
 <img src="https://github.com/wx405557858/neural_tracking/blob/media/imgs/output_example.gif" align="right" width=384>
