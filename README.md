@@ -28,8 +28,7 @@ bash ./data/download_video.sh
 python example_tracking_video.py
 ```
 
-<!--
-<img src='https://drive.google.com/file/d/1DN3zOfz4xx4wgTNtGNRruHs9mUEewjer/view?usp=sharing' align="right" width=384>-->
+<img src="https://github.com/wx405557858/neural_tracking/blob/media/imgs/output_example.gif" align="right" width=384>
 
 **Note**: The model is originally implemented with TensorFlow to be compatible with [Coral](https://coral.ai/products/accelerator), using TPU as USB Accelerator for Raspberry Pi on-device computation. Please feel free to switch the model to other frameworks, like PyTorch, for your purpose.
 
